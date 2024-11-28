@@ -1,0 +1,34 @@
+# Archivos de Python compilados
+*.pyc
+*.pyo
+__pycache__/
+
+# Entorno virtual (para no incluir las dependencias del entorno virtual)
+venv/
+env/
+
+# Archivos de configuración específicos del IDE
+.vscode/
+.idea/
+
+# Archivos de log
+*.log
+
+# Archivos de configuración de PyCharm
+*.iml
+
+# Archivos de base de datos locales
+*.sqlite
+*.db
+
+# Modelos de Machine Learning guardados con joblib o h5py
+modelo.h5
+*.joblib
+
+# Archivos temporales de Streamlit
+.streamlit/
+
+# Otros archivos temporales
+*.bak
+*.swp
+*.swo
