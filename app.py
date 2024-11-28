@@ -29,18 +29,21 @@ vml_logo = get_base64_image("vml.png")
 header_html = f"""
 <div style="
     background-color: #c8102e;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;  /* Ocupa todo el ancho */
+    box-sizing: border-box;
+    margin: 0;
 ">
     <div style="color: white; font-size: 24px; font-weight: bold;">
         Predicción de Éxito en Campañas Publicitarias
     </div>
-    <div style="display: flex; gap: 20px;"> <!-- Contenedor para logos alineados lado a lado -->
-        <img src="data:image/png;base64,{honda_logo}" alt="Honda Logo" style="height: 50px;">
-        <img src="data:image/png;base64,{vml_logo}" alt="VML Logo" style="height: 50px;">
+    <div style="display: flex; gap: 10px;">
+        <img src="data:image/png;base64,{honda_logo}" alt="Honda Logo" style="height: 28px;">
+        <img src="data:image/png;base64,{vml_logo}" alt="VML Logo" style="height: 28px;">
     </div>
 </div>
 """
