@@ -1,7 +1,7 @@
 import streamlit as st
 import joblib
 import numpy as np
-import pandas as pd  # Asegúrate de importar pandas
+import pandas as pd
 
 # Cargar el modelo
 model = joblib.load("decision_tree_pipeline.pkl")
@@ -16,10 +16,10 @@ relevant_columns = [
 campaign_types = ['BRANDING', 'PERFORMANCE', 'TACTICOS', 'MARKETING CLOUD']
 
 # Interfaz de usuario
-st.title("Predicción de Campañas Publicitarias")
+st.title("Predicción de Éxito en Campañas Publicitarias")
 
 # Crear inputs para las variables
-st.subheader("Por favor ingresa los valores de las siguientes variables:")
+st.subheader("Por favor, ingresa los valores de las siguientes variables:")
 
 inputs = {}
 
@@ -41,8 +41,15 @@ input_df = pd.DataFrame([inputs], columns=relevant_columns)
 # Botón para predecir
 if st.button("Predecir"):
     try:
-        # Realizar predicción
-        prediction = model.predict(input_df)
-        st.write(f"Predicción del modelo: {prediction[0]}")
+        # Realizar predicción y obtener probabilidades
+        prediction = model.predict(input_df)[0]
+        prediction_proba = model.predict_proba(input_df)[0]
+        
+        # Mostrar resultados con mensajes intuitivos
+        if prediction == 1:
+            st.success(f"¡La campaña será exitosa! ({prediction_proba[1] * 100:.2f}% de confianza)")
+        else:
+            st.error(f"La campaña no será exitosa ({prediction_proba[0] * 100:.2f}% de confianza)")
+    
     except Exception as e:
         st.error(f"Error al realizar la predicción: {str(e)}")
