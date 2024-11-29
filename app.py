@@ -1,6 +1,5 @@
 import streamlit as st
 import joblib
-import numpy as np
 import pandas as pd
 import base64
 
@@ -15,6 +14,18 @@ relevant_columns = [
 
 # Opciones para Campaign type
 campaign_types = ['BRANDING', 'PERFORMANCE', 'TACTICOS', 'MARKETING CLOUD']
+
+# Helpers para los campos
+helpers = {
+    'Inversion Planeada': "Indica la inversión planeada en pesos colombianos (valor decimal).",
+    'Meta Leads': "Número objetivo de leads que esperas alcanzar con la campaña.",
+    'Meta Conversaciones': "Número de conversaciones objetivo generadas por la campaña.",
+    'Meta Clicks': "Número total de clics que esperas lograr.",
+    'Meta Seguidores': "Número objetivo de seguidores nuevos obtenidos.",
+    'Meta interacciones': "Número esperado de interacciones en redes sociales.",
+    'Meta Alcance': "Cantidad de usuarios que esperas que la campaña alcance.",
+    'Campaign type': "Selecciona el tipo de campaña que estás planificando."
+}
 
 # Función para cargar imágenes como base64
 def get_base64_image(image_path):
@@ -50,25 +61,44 @@ header_html = f"""
 
 # Mostrar la cabecera en la app
 st.markdown(header_html, unsafe_allow_html=True)
-# Interfaz de usuario
-# st.title("Predicción de Éxito en Campañas Publicitarias")
 
 # Crear inputs para las variables
 st.subheader("Por favor, ingresa los valores de las siguientes variables:")
 
 inputs = {}
 
-# Campo numérico para las variables numéricas
-for col in relevant_columns[:-1]:  # Excluir 'Campaign type'
-    inputs[col] = st.number_input(
-        f"{col}:",
-        step=0.01,
-        key=col
-    )
+# Crear columnas
+col1, col2 = st.columns(2)
 
-# Dropdown para 'Campaign type'
-selected_campaign_type = st.selectbox("Selecciona el tipo de campaña:", campaign_types)
-inputs['Campaign type'] = selected_campaign_type
+# Campo numérico para "Inversion Planeada" en la primera columna
+with col1:
+    inputs['Inversion Planeada'] = st.number_input(
+        f"Inversión Planeada (en pesos colombianos):",
+        min_value=0.0,
+        step=1000.0,
+        key='Inversion Planeada'
+    )
+    st.markdown(f"<small style='color: gray;'>{helpers['Inversion Planeada']}</small>", unsafe_allow_html=True)
+
+# Campos numéricos para las demás variables en las dos columnas
+for idx, col in enumerate(relevant_columns[1:-1]):  # Excluir 'Campaign type'
+    with col1 if idx % 2 == 0 else col2:
+        inputs[col] = st.number_input(
+            f"{col}:",
+            min_value=0,
+            step=1,
+            key=col
+        )
+        st.markdown(f"<small style='color: gray;'>{helpers[col]}</small>", unsafe_allow_html=True)
+
+# Dropdown para 'Campaign type' en la segunda columna
+with col2:
+    selected_campaign_type = st.selectbox(
+        "Selecciona el tipo de campaña:",
+        campaign_types
+    )
+    st.markdown(f"<small style='color: gray;'>{helpers['Campaign type']}</small>", unsafe_allow_html=True)
+    inputs['Campaign type'] = selected_campaign_type
 
 # Convertir inputs a un DataFrame con las columnas esperadas
 input_df = pd.DataFrame([inputs], columns=relevant_columns)
